@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flag App</title>
+    <style>
+        /* Twoje istniejące style */
+        .flag-container img {
+            border: 2px solid black; /* Dodaj czarną ramkę do flagi */
+        }
+
+        .flag-colors {
+            margin-top: 10px;
+            text-align: center; /* Wyśrodkuj tekst */
+        }
+
+        .color-box {
+            width: 120px; /* Zmniejsz szerokość pola koloru */
+            height: 30px; /* Zmniejsz wysokość pola koloru */
+            margin-right: 10px;
+            display: inline-block;
+            font-weight: bold;
+            border: 2px solid black; /* Dodaj czarną ramkę do pola koloru */
+        }
+    </style>
+    <!-- Dodaj do sekcji head -->
+    <script src="https://cdn.rawgit.com/lokesh/color-thief/2.3.0/dist/color-thief.min.js"></script>
+</head>
+<body>
+
+<form th:action="@{/flag}" th:object="${countryCodeForm}" method="post">
+    <label for="countryCode">Country Code:</label>
+    <input type="text" id="countryCode" th:field="*{countryCode}" required maxlength="3" size="3">
+
+    <button type="submit">Get Flag</button>
+    <br>
+    <br>
+</form>
+
+<div th:if="${flagImageUrl != null}" class="flag-container">
+    <img th:src="${flagImageUrl}" alt="Flag Image" id="flagImage">
+</div>
+
+<div th:if="${flagColors != null}" class="flag-colors">
+    <h2>Flag Colors:</h2>
+    <div th:each="color : ${flagColors}" class="color-box" th:style="'background-color: ' + ${color}"></div>
+</div>
+
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        var flagImage = document.getElementById('flagImage');
+
+        if (flagImage) {
+            var colorThief = new ColorThief();
+            var colors = colorThief.getPalette(flagImage, 5);
+
+            console.log('Flag Colors:', colors);
+
+            var simplifiedColors = simplifyColors(colors);
+
+            var colorsContainer = document.createElement('div');
+            colorsContainer.classList.add('flag-colors');
+
+            simplifiedColors.forEach(function (color) {
+                var colorBox = document.createElement('div');
+                colorBox.classList.add('color-box');
+                colorBox.style.backgroundColor = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
+                colorsContainer.appendChild(colorBox);
+            });
+
+            document.body.appendChild(colorsContainer);
+        }
+    });
+
+    function simplifyColors(colors) {
+        var simplifiedColors = [];
+
+        colors.forEach(function (color) {
+            var simplifiedColor = [Math.round(color[0] / 25) * 25, Math.round(color[1] / 25) * 25, Math.round(color[2] / 25) * 25];
+            if (!containsColor(simplifiedColors, simplifiedColor)) {
+                simplifiedColors.push(simplifiedColor);
+            }
+        });
+
+        return simplifiedColors;
+    }
+
+    function containsColor(colors, color) {
+        for (var i = 0; i < colors.length; i++) {
+            if (areColorsEqual(colors[i], color)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function areColorsEqual(color1, color2) {
+        return color1[0] === color2[0] && color1[1] === color2[1] && color1[2] === color2[2];
+    }
+</script>
+
+</body>
+</html>
