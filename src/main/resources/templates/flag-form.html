@@ -29,7 +29,7 @@
 </head>
 <body>
 
-<form th:action="@{/flag}" th:object="${countryCodeForm}" method="post">
+<form th:action="@{/flag}" th:object="${countryCodeForm}" method="get">
     <label for="countryCode">Country Code:</label>
     <input type="text" id="countryCode" th:field="*{countryCode}" required maxlength="3" size="3">
 

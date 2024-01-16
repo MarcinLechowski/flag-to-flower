@@ -1,4 +1,4 @@
-package com.Kaer.flagtoflower.model;
+package com.Kaer.flagtoflower.flag.model;
 
 import lombok.Data;
 

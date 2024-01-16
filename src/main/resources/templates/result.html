@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flower Color Form</title>
+    <style>
+        .flower-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; /* Dodane centrowanie dla kontenera flowers */
+        }
+
+        .flower-card {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            display: flex;
+            flex-direction: column; /* Dodane ustawienia flex dla centrowania */
+            align-items: center; /* Dodane ustawienia flex dla centrowania */
+        }
+
+        .flower-image {
+            max-width: 100px;
+            max-height: 100px;
+        }
+    </style>
+    <script th:inline="javascript">
+        function submitForm() {
+            var color = document.getElementById('color').value;
+            if (color.trim() !== "") {
+                document.getElementById('colorForm').submit();
+            } else {
+                alert('Please enter a color');
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>Enter Flower Color</h1>
+<form id="colorForm" action="/getFlowers" method="get">
+    <label for="color">Enter color:</label>
+    <input type="text" id="color" name="color" required>
+    <button type="button" onclick="submitForm()">Search</button>
+</form>
+
+<div class="flower-container" th:if="${not #lists.isEmpty(flowers)}">
+    <!-- Display flowers here -->
+    <div th:each="flower : ${flowers}" class="flower-card">
+        <img th:src="${flower.imageUrl}" alt="Flower Image" class="flower-image">
+        <p th:text="${flower.commonName}"></p>
+    </div>
+</div>
+
+<!-- Display message when no flowers found -->
+<div th:if="${#lists.isEmpty(flowers)}">
+    <p>No flowers found for the given color.</p>
+</div>
+</body>
+</html>
