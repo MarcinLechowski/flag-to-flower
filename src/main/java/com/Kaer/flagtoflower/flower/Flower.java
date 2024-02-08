@@ -11,5 +11,4 @@ public class Flower {
     private String commonName;
     private String imageUrl;
     private String colorName;
-    private String blablabla;
 }
