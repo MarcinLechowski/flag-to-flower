@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flag App</title>
     <style>
+        body {
+            background-color: #001f3f; /* Dark blue background color */
+            color: #ffffff; /* Set text color to white for better contrast */
+        }
         /* Twoje istniejące style */
         .flag-container img {
             border: 2px solid black; /* Dodaj czarną ramkę do flagi */
@@ -22,10 +26,9 @@
             display: inline-block;
             font-weight: bold;
             border: 2px solid black; /* Dodaj czarną ramkę do pola koloru */
+            cursor: pointer; /* Zmiana kursora na pointer */
         }
     </style>
-    <!-- Dodaj do sekcji head -->
-    <script src="https://cdn.rawgit.com/lokesh/color-thief/2.3.0/dist/color-thief.min.js"></script>
 </head>
 <body>
 
@@ -44,8 +47,25 @@
 
 <div th:if="${flagColors != null}" class="flag-colors">
     <h2>Flag Colors:</h2>
-    <div th:each="color : ${flagColors}" class="color-box" th:style="'background-color: ' + ${color}"></div>
+    <div th:each="color : ${flagColors}" class="color-box" th:style="'background-color: rgb(' + ${color} + ')'"></div>
 </div>
+
+<div th:if="${colorNames != null}" class="flag-colors" th:fragment="colorNamesFragment">
+    <h2>Color Names:</h2>
+    <div th:each="colorName : ${colorNames}" class="color-box" th:text="${colorName}"></div>
+</div>
+
+<!-- Aktualizacja formularza przenoszącego do /flag/getColorNames -->
+<form th:action="@{/flag/getColorNames}" method="get">
+    <input type="hidden" name="colors" th:each="color : ${flagColors}" th:value="${color}">
+    <button type="submit">Get Color Names</button>
+</form>
+
+<!-- Dodano przycisk przenoszący do /flowers-form -->
+<form th:action="@{/flowers-form}" method="get">
+    <input type="hidden" name="flagColors" th:value="${flagColors}">
+    <button type="submit">Go to Flowers</button>
+</form>
 
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function () {

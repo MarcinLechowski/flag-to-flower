@@ -1,0 +1,8 @@
+<root>
+    <item name='java.lang.Class T cast(java.lang.Object)'>
+        <annotation name='org.jetbrains.annotations.Contract'>
+            <val name="value" val="&quot;_-&gt;param1&quot;"/>
+            <val name="pure" val="true"/>
+        </annotation>
+    </item>
+</root>
