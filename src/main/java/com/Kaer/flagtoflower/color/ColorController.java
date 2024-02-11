@@ -18,13 +18,34 @@ public class ColorController {
         this.colorService = colorService;
     }
 
-    @GetMapping("/flag/getColorNames")
-    public String getColorNames(@RequestParam("colors") List<String> colors, Model model) throws IOException {
+    @GetMapping("/flag/getColorNamesAndFlowers")
+    public String getColorNamesAndFlowers(@RequestParam("colors") List<String> colors, Model model) throws IOException {
         List<String> colorUrls = colorService.createColorUrls(colors);
         List<String> colorNames = colorService.getColorNames(colorUrls);
+        List<String> flowerUrls = colorService.buildFlowerUrl(colorNames);
+
+        System.out.println("colorNames from buildFlowerUrl: " + colorNames);
+        System.out.println("flowerUrls from ColorController /getFlowers" + flowerUrls);
+
         model.addAttribute("colorNames", colorNames);
+        model.addAttribute("flowerUrls", flowerUrls);
 
+        return "flag-form :: colorNamesAndFlowersFragment";
+    }
 
-        return "flag-form :: colorNamesFragment";
+    @GetMapping("/getFlowers")
+    public String getFlowers(@RequestParam("colorNames") List<String> colorNames, Model model) {
+        List<String> flowerUrls = colorService.buildFlowerUrl(colorNames);
+
+        System.out.println("flowerUrls from ColorController /getFlowers" + flowerUrls);
+        try {
+            List<Flower> flowers = colorService.getFlowersByColorNames(colorNames);
+
+            model.addAttribute("flowers", flowers);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "error";
+        }
+        return "flag-form :: colorNamesAndFlowersFragment";
     }
 }

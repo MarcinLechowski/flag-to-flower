@@ -6,27 +6,54 @@
     <title>Flag App</title>
     <style>
         body {
-            background-color: #001f3f; /* Dark blue background color */
-            color: #ffffff; /* Set text color to white for better contrast */
-        }
-        /* Twoje istniejące style */
-        .flag-container img {
-            border: 2px solid black; /* Dodaj czarną ramkę do flagi */
+            background-color: #001f3f;
+            color: #ffffff;
         }
 
-        .flag-colors {
+        .flag-container img {
+            border: 2px solid black;
+        }
+
+        .flag-colors{
             margin-top: 10px;
-            text-align: center; /* Wyśrodkuj tekst */
+            text-align: center;
+        }
+        .flower-container {
+            margin-top: 10px;
+            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .color-box {
-            width: 120px; /* Zmniejsz szerokość pola koloru */
-            height: 30px; /* Zmniejsz wysokość pola koloru */
+            width: 120px;
+            height: 30px;
             margin-right: 10px;
             display: inline-block;
             font-weight: bold;
-            border: 2px solid black; /* Dodaj czarną ramkę do pola koloru */
-            cursor: pointer; /* Zmiana kursora na pointer */
+            border: 2px solid black;
+            cursor: pointer;
+        }
+
+        .flower-card {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .flower-image {
+            max-width: 100px;
+            max-height: 100px;
+        }
+
+        .common-name {
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -35,7 +62,6 @@
 <form th:action="@{/flag}" th:object="${countryCodeForm}" method="get">
     <label for="countryCode">Country Code:</label>
     <input type="text" id="countryCode" th:field="*{countryCode}" required maxlength="3" size="3">
-
     <button type="submit">Get Flag</button>
     <br>
     <br>
@@ -50,22 +76,39 @@
     <div th:each="color : ${flagColors}" class="color-box" th:style="'background-color: rgb(' + ${color} + ')'"></div>
 </div>
 
-<div th:if="${colorNames != null}" class="flag-colors" th:fragment="colorNamesFragment">
+<div th:if="${colorNames != null && flowerUrls != null}" class="flag-colors" th:fragment="colorNamesAndFlowersFragment">
     <h2>Color Names:</h2>
     <div th:each="colorName : ${colorNames}" class="color-box" th:text="${colorName}"></div>
+
+    <h2>Flower Images:</h2>
+    <div class="flower-container" th:if="${not #lists.isEmpty(flowers)}">
+        <!-- Display flowers here -->
+        <div th:each="flower : ${flowers}" class="flower-card">
+            <p th:text="${flower.colorName}" class="color-name"></p>
+            <img th:src="${flower.imageUrl}" alt="Flower Image" class="flower-image">
+            <p th:text="${flower.commonName}"></p>
+        </div>
+    </div>
+
+    <!-- Display message when no flowers found -->
+    <div th:if="${#lists.isEmpty(flowers)}">
+        <p>No flowers found for the given color.</p>
+    </div>
 </div>
 
-<!-- Aktualizacja formularza przenoszącego do /flag/getColorNames -->
-<form th:action="@{/flag/getColorNames}" method="get">
-    <input type="hidden" name="colors" th:each="color : ${flagColors}" th:value="${color}">
-    <button type="submit">Get Color Names</button>
+
+<!-- Formularz do uzyskiwania nazw kolorów i obrazków kwiatów -->
+<form th:action="@{/getFlowers}" method="get">
+    <input type="hidden" th:each="color : ${flagColors}" name="colorNames" th:value="${color}">
+    <button type="submit">Get Color Names and Flowers</button>
 </form>
 
-<!-- Dodano przycisk przenoszący do /flowers-form -->
-<form th:action="@{/flowers-form}" method="get">
-    <input type="hidden" name="flagColors" th:value="${flagColors}">
-    <button type="submit">Go to Flowers</button>
-</form>
+
+<!-- Fragment wyświetlający nazwy kolorów i obrazki kwiatów -->
+<div th:if="${colorNames != null && flowerUrls != null}" class="flower-container">
+    <h2>Color Names:</h2>
+    <div th:each="colorName : ${colorNames}" class="color-box" th:text="${colorName}"></div>
+
 
 <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function () {

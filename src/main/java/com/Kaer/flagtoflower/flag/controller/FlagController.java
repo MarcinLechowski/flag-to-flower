@@ -2,7 +2,6 @@ package com.Kaer.flagtoflower.flag.controller;
 
 import com.Kaer.flagtoflower.color.ColorService;
 import com.Kaer.flagtoflower.flag.model.CountryCodeForm;
-import com.Kaer.flagtoflower.flower.FlowerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,12 +20,10 @@ import java.util.stream.Collectors;
 public class FlagController {
 
     private  final int NUM_REGIONS = 20;
-    private final FlowerService flowerService;
     private final ColorService colorService;
     private final RestTemplate restTemplate;
 
-    public FlagController(FlowerService flowerService, ColorService colorService, RestTemplate restTemplate) {
-        this.flowerService = flowerService;
+    public FlagController(ColorService colorService, RestTemplate restTemplate) {
         this.colorService = colorService;
         this.restTemplate = restTemplate;
     }
@@ -84,6 +81,7 @@ public class FlagController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("colors from FlagController: " + colors);
         return colors;
     }
 
