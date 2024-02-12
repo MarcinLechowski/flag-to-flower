@@ -50,7 +50,7 @@ public class ColorService {
         return colorUrls;
     }
 
-    public List<String> getColorNames(List<String> colorUrls) throws IOException {
+    public List<String> getColorNames(List<String> colorUrls)  {
         List<String> colorNames = new ArrayList<>();
 
         for (String oneColorUrl : colorUrls) {

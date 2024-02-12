@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flower Search Result</title>
+    <style>
+        .flower-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .flower-card {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .flower-image {
+            max-width: 100px;
+            max-height: 100px;
+        }
+
+        .color-name {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Flower Search Result</h1>
+
+<div class="flower-container" th:if="${not #lists.isEmpty(flowers)}">
+    <!-- Display flowers here -->
+    <div th:each="flower : ${flowers}" class="flower-card">
+        <p th:text="${flower.colorName}" class="color-name"></p>
+        <img th:src="${flower.imageUrl}" alt="Flower Image" class="flower-image">
+        <p th:text="${flower.commonName}"></p>
+    </div>
+</div>
+
+<!-- Display message when no flowers found -->
+<div th:if="${#lists.isEmpty(flowers)}">
+    <p>No flowers found for the given color.</p>
+</div>
+
+</body>
+</html>

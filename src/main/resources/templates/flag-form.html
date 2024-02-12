@@ -99,7 +99,7 @@
 
 <!-- Formularz do uzyskiwania nazw kolorów i obrazków kwiatów -->
 <form th:action="@{/getFlowers}" method="get">
-    <input type="hidden" th:each="color : ${flagColors}" name="colorNames" th:value="${color}">
+    <input type="hidden" th:each="color : ${flagColors}" name="colors" th:value="${color}">
     <button type="submit">Get Color Names and Flowers</button>
 </form>
 
